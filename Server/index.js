@@ -37,8 +37,18 @@ else if (!process.env.JWT_SECRET) {
 const mongoose = __importStar(require("mongoose"));
 const express = require('express');
 const http = __importStar(require("http"));
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const app = express();
-mongoose.connect('mongodb://localhost:27017/login2023').then(() => {
+app.use(cors());
+app.use(bodyParser.json());
+app.get('/', function (req, res) {
+    res.status(200).json({ api_version: '1.0', author: 'BassHound' });
+});
+//TODO: storing uri in .env
+// checking port in containers
+// mongoose.connect('mongodb://mongo:27018/taw-app2023')
+mongoose.connect('mongodb://127.0.0.1:27017/taw-app2023').then(() => {
     let server = http.createServer(app);
     server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
-});
+}).catch(err => console.log(err));

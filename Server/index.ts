@@ -24,7 +24,7 @@ app.get('/', function (req : any, res : any) {
 // checking port in containers
 
 // mongoose.connect('mongodb://mongo:27018/taw-app2023')
-mongoose.connect('mongodb://localhost:27017/taw-app2023').then(()=>{
+mongoose.connect('mongodb://127.0.0.1:27017/taw-app2023').then(()=>{
     let server = http.createServer(app);
     server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
 }).catch(err => console.log(err));
