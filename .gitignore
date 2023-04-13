@@ -2,3 +2,4 @@ Client/loginProject/node_modules/*
 Client/.angular/*
 Server/node_modules/*
 .idea
+Server/.env
