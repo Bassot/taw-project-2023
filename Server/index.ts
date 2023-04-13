@@ -11,9 +11,18 @@ if (dotenv.error) {
 import * as mongoose from 'mongoose';
 const express = require('express');
 import * as http from "http";
+const cors = require('cors');
+const bodyParser =  require('body-parser');
 
 const app = express();
-mongoose.connect('mongodb://mymongo:27017/taw-app2023').then(()=>{
+app.use(cors());
+app.use(bodyParser.json());
+app.get('/', function (req : any, res : any) {
+    res.status(200).json({api_version: '1.0', author: 'BassHound'});
+});
+//TODO: storing uri in .env
+// checking port in containers
+mongoose.connect('mongodb://mongo:27018/taw-app2023').then(()=>{
     let server = http.createServer(app);
     server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
-});
+}).catch(err => console.log(err));

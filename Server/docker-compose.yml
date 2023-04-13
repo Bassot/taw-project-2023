@@ -1,0 +1,18 @@
+version: "3"
+services:
+  app:
+    container_name: taw-app-container
+    image: taw-app
+    restart: always
+    build: .
+    ports:
+      - "8080:8080"
+    links:
+      - mongo
+  mongo:
+    container_name: taw-mongo-container
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - '27018:27017'
