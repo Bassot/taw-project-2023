@@ -13,6 +13,8 @@ const express = require('express');
 import * as http from "http";
 const cors = require('cors');
 const bodyParser =  require('body-parser');
+import * as user from './Models/User';
+
 
 const app = express();
 app.use(cors());
@@ -28,3 +30,21 @@ mongoose.connect('mongodb://127.0.0.1:27017/taw-app2023').then(()=>{
     let server = http.createServer(app);
     server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
 }).catch(err => console.log(err));
+
+app.post('/users', (req :any,res :any,next :any) => {
+
+    var u = user.newUser( req.body );
+    if( !req.body.password ) {
+        return next({ statusCode:404, error: true, errormessage: "Password field missing"} );
+    }
+    u.setPassword( req.body.password );
+
+    u.save().then( (data :any) => {
+        return res.status(200).json({ error: false, errormessage: "", id: data._id });
+    }).catch( (reason :any) => {
+        if( reason.code === 11000 )
+            return next({statusCode:404, error:true, errormessage: "User already exists"} );
+        return next({ statusCode:404, error: true, errormessage: "DB error: "+reason.errmsg });
+    })
+
+});
