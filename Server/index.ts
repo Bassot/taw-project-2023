@@ -63,7 +63,7 @@ mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
     var u = newUser({
         username: 'BassHound',
         email: 'bass@hound.it'
-    })
+    });
     u.setAdmin();
     u.setModerator();
     u.setPassword("1234");
