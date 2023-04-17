@@ -3,7 +3,7 @@ import crypto = require('crypto');
 export interface User extends mongoose.Document {
     readonly _id: mongoose.Schema.Types.ObjectId,
     username: string,
-    mail: string,
+    email: string,
     roles: string[],
     salt: string,    // salt is a random string that will be mixed with the actual password before hashing
     digest: string,  // this is the hashed password (digest of the password)
@@ -20,7 +20,7 @@ var userSchema = new mongoose.Schema<User>( {
         type: mongoose.SchemaTypes.String,
         required: true
     },
-    mail: {
+    email: {
         type: mongoose.SchemaTypes.String,
         required: true,
         unique: true

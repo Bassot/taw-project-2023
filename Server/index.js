@@ -39,16 +39,32 @@ const express = require('express');
 const http = __importStar(require("http"));
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const user = __importStar(require("./Models/User"));
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.get('/', function (req, res) {
     res.status(200).json({ api_version: '1.0', author: 'BassHound' });
 });
-//TODO: storing uri in .env
-// checking port in containers
-// mongoose.connect('mongodb://mongo:27018/taw-app2023')
-mongoose.connect('mongodb://127.0.0.1:27017/taw-app2023').then(() => {
+app.post('/users', (req, res, next) => {
+    var u = user.newUser(req.body);
+    if (!req.body.password) {
+        return next({ statusCode: 404, error: true, errormessage: "Password field missing" });
+    }
+    u.setPassword(req.body.password);
+    u.save().then((data) => {
+        return res.status(200).json({ error: false, errormessage: "", id: data._id });
+    }).catch((reason) => {
+        if (reason.code === 11000)
+            return next({ statusCode: 404, error: true, errormessage: "User already exists" });
+        return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason.errmsg });
+    });
+});
+// the ENV var DBHOST is set only if the server is running inside a container
+const dbHost = process.env.DBHOST || '127.0.0.1';
+mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
     let server = http.createServer(app);
     server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
+}).then(() => {
+    console.log('Connected to mongoDB'.bgGreen);
 }).catch(err => console.log(err));

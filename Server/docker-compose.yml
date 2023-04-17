@@ -7,7 +7,9 @@ services:
     build: .
     ports:
       - "8080:8080"
-    links:
+    networks:
+      - network
+    depends_on:
       - mongo
   mongo:
     container_name: taw-mongo-container
@@ -16,3 +18,10 @@ services:
       - ./data:/data/db
     ports:
       - '27018:27017'
+    networks:
+      - network
+networks:
+  network:
+    driver: 'bridge'
+# docker-compose up
+# docker system prune -a --volumes

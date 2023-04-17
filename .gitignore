@@ -1,5 +1,8 @@
-Client/loginProject/node_modules/*
-Client/.angular/*
+# TODO, adding client node_modules
+
 Server/node_modules/*
 .idea
 Server/data
+Server/index.js
+Server/Models/*.js
+
