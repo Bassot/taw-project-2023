@@ -23,6 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const User_1 = require("./Models/User");
 const dotenv = require('dotenv').config();
 const colors = require("colors");
 colors.enabled = true;
@@ -66,5 +67,22 @@ mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
     let server = http.createServer(app);
     server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
 }).then(() => {
-    console.log('Connected to mongoDB'.bgGreen);
+    let s = 'Connected to mongoDB, dbHost: ' + dbHost;
+    console.log(s.bgGreen);
+    return user.getModel().findOne({ email: "bass@hound.it" });
+}).then((admin) => {
+    if (admin) {
+        console.log('The admin user already exists');
+        return;
+    }
+    console.log('Creating a new admin user...');
+    // newUser returns a user mongoose model in wich we can call the method save
+    var u = (0, User_1.newUser)({
+        username: 'BassHound',
+        email: 'bass@hound.it'
+    });
+    u.setAdmin();
+    u.setModerator();
+    u.setPassword("1234");
+    return u.save();
 }).catch(err => console.log(err));
