@@ -1,9 +1,9 @@
 # TODO, adding client node_modules
 
-Server/node_modules/*
+Server/Code/node_modules/*
 .idea
 Server/data
-Server/index.js
-Server/Models/*.js
+Server/Code/index.js
+Server/Code/Models/*.js
 
 
