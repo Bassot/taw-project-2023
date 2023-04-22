@@ -45,7 +45,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.get('/', function (req, res) {
-    res.status(200).json({ api_version: '1.0', author: 'BassHound' });
+    res.status(200).json({ api_version: '1.1', author: 'BassHound' });
 });
 app.post('/users', (req, res, next) => {
     var u = user.newUser(req.body);
@@ -84,5 +84,6 @@ mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
     u.setAdmin();
     u.setModerator();
     u.setPassword("1234");
-    return u.save();
+    u.save();
+    console.log('User admin created');
 }).catch(err => console.log(err));

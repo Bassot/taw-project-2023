@@ -3,8 +3,9 @@ services:
   app:
     container_name: taw-app-container
     image: taw-app
-    restart: always
-    build: .
+    volumes:
+      - ./Server/Code:/app
+    build: ./Server/Code
     ports:
       - "8080:8080"
     networks:
@@ -15,7 +16,7 @@ services:
     container_name: taw-mongo-container
     image: mongo
     volumes:
-      - ./data:/data/db
+      - ./Server/data:/data/db
     ports:
       - '27018:27017'
     networks:
