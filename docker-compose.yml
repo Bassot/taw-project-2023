@@ -1,10 +1,12 @@
 version: "3"
 services:
+  ### back-end container
   app:
     container_name: taw-app-container
     image: taw-app
     volumes:
       - ./Server/Code:/app
+      - /Server/Code/node_modules
     build: ./Server/Code
     ports:
       - "8080:8080"
@@ -12,6 +14,21 @@ services:
       - network
     depends_on:
       - mongo
+  ### front-end container
+  frontend:
+    container_name: taw-frontend-container
+    image: taw-frontend
+    volumes:
+      - ./Client/TawFrontend:/app
+    build: ./Client/TawFrontend
+    ports:
+      - "4200:4200"
+    networks:
+      - network
+    depends_on:
+      - mongo
+      - app
+  ### mongodb container
   mongo:
     container_name: taw-mongo-container
     image: mongo

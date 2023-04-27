@@ -1,8 +1,7 @@
-# TODO, adding client node_modules
-
+Client/TawFrontend/node_modules/*
 Server/Code/node_modules/*
 .idea
-Server/data
+Server/data/*
 Server/Code/index.js
 Server/Code/Models/*.js
 

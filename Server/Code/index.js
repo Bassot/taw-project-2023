@@ -40,8 +40,14 @@ const express = require('express');
 const http = __importStar(require("http"));
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const { expressjwt: jwt } = require('express-jwt');
+const jsonwebtoken = require("jsonwebtoken"); // JWT generation
 const user = __importStar(require("./Models/User"));
 const app = express();
+let auth = jwt({
+    secret: process.env.JWT_SECRET,
+    algorithms: ["HS256"]
+});
 app.use(cors());
 app.use(bodyParser.json());
 app.get('/', function (req, res) {
@@ -59,6 +65,34 @@ app.post('/users', (req, res, next) => {
         if (reason.code === 11000)
             return next({ statusCode: 404, error: true, errormessage: "User already exists" });
         return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason.errmsg });
+    });
+});
+app.get('/login', (req, res, next) => {
+    let username = req.body.username;
+    let password = req.body.password;
+    console.log("New login attempt from ".green + username);
+    user.getModel().findOne({ mail: username }, (err, user) => {
+        if (err) {
+            return next({ statusCode: 500, error: true, errormessage: err });
+        }
+        if (!user) {
+            return next({ statusCode: 500, error: true, errormessage: "Invalid user" });
+        }
+        if (user.validatePassword(password)) {
+            let tokendata = {
+            // TODO define token
+            };
+            console.log("Login granted. Generating token");
+            let token_signed = jsonwebtoken.sign(tokendata, process.env.JWT_SECRET, { expiresIn: '1h' });
+            // https://jwt.io
+            return res.status(200).json({
+                error: false,
+                errormessage: "",
+                id: user._id,
+                token: token_signed
+            });
+        }
+        return next({ statusCode: 500, error: true, errormessage: "Invalid password" });
     });
 });
 // the ENV var DBHOST is set only if the server is running inside a container
