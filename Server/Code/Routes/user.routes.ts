@@ -7,16 +7,18 @@ userRouter.use(express.json());
 
 userRouter.get("/", async (_req, res) => {
     try {
-        const users = await user.getModel().find();
-        res.status(200).send(users);
-    } catch (error :any) {
+        let users = await user.getModel().find({});
+        res.status(200).send(JSON.stringify(users));
+        }
+    catch (error :any) {
         res.status(500).send(error.message);
     }
 });
 
 userRouter.post("/", async (req, res) => {
-    let u = user.newUser(req.body);
-    u.setPassword(req.body.password);
+    const newuser = req.body;
+    let u = user.newUser(newuser);
+    u.setPassword("1234");
     u.save().then((data: any) => {
         return res.status(200).json({error: false, errormessage: "", id: data._id});
     }).catch((reason) => {

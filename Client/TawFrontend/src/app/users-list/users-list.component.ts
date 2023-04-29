@@ -12,6 +12,7 @@ import { UserService } from '../User/user.service';
       <thead>
       <tr>
         <th>Username</th>
+        <th>Email</th>
       </tr>
       </thead>
 

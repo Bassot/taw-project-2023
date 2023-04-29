@@ -1,4 +1,4 @@
-/*
+
 
 import {newUser} from "./Models/User";
 
@@ -20,6 +20,9 @@ const bodyParser = require('body-parser');
 const { expressjwt: jwt } = require('express-jwt');
 import jsonwebtoken = require('jsonwebtoken');  // JWT generation
 import * as user from './Models/User';
+import {userRouter} from "./Routes/user.routes";
+
+
 
 
 const app = express();
@@ -29,9 +32,16 @@ let auth = jwt( {
 } );
 app.use(cors());
 app.use(bodyParser.json());
+
+
+
+
+
 app.get('/', function (req, res) {
     res.status(200).json({api_version: '1.1', author: 'BassHound'});
 });
+
+/*
 app.post('/users', (req, res, next) => {
 
     var u = user.newUser(req.body);
@@ -84,37 +94,35 @@ app.get('/login', (req, res, next)=>{
     });
 });
 
+ */
+
 // the ENV var DBHOST is set only if the server is running inside a container
 const dbHost = process.env.DBHOST || '127.0.0.1';
 mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
     let server = http.createServer(app);
+    app.use("/users", userRouter);;
     server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
 }).then(() => {
     let s = 'Connected to mongoDB, dbHost: ' + dbHost;
     console.log(s.bgGreen);
-    return user.getModel().findOne( {email:"bass@hound.it"} );
-}).then((admin)=>{
-    if(admin){
-        console.log('The admin user already exists');
-        return;
-    }
-    console.log('Creating a new admin user...');
-    // newUser returns a user mongoose model in wich we can call the method save
-    var u = newUser({
-        username: 'BassHound',
-        email: 'bass@hound.it'
-    });
-    u.setAdmin();
-    u.setModerator();
-    u.setPassword("1234");
-    u.save();
-    console.log('User admin created');
 }).catch(err => console.log(err));
 
-
+/*
+ var u = newUser({
+        username: 'BassHound',
+        email: 'bass@hound.it',
+        role: 'Admin'
+    });
+    u.setPassword("1234");
+    u.save();
  */
 
 
+
+
+
+
+/*
 import * as dotenv from "dotenv";
 import cors from "cors";
 import express from "express";
@@ -143,3 +151,6 @@ mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
     let s = 'Connected to mongoDB, dbHost: ' + dbHost;
     console.log(s.bgGreen);
 }).catch(err => console.log(err));
+
+
+ */

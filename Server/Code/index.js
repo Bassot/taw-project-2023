@@ -23,7 +23,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const User_1 = require("./Models/User");
 const dotenv = require('dotenv').config();
 const colors = require("colors");
 colors.enabled = true;
@@ -41,8 +40,7 @@ const http = __importStar(require("http"));
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { expressjwt: jwt } = require('express-jwt');
-const jsonwebtoken = require("jsonwebtoken"); // JWT generation
-const user = __importStar(require("./Models/User"));
+const user_routes_1 = require("./Routes/user.routes");
 const app = express();
 let auth = jwt({
     secret: process.env.JWT_SECRET,
@@ -53,37 +51,47 @@ app.use(bodyParser.json());
 app.get('/', function (req, res) {
     res.status(200).json({ api_version: '1.1', author: 'BassHound' });
 });
+/*
 app.post('/users', (req, res, next) => {
+
     var u = user.newUser(req.body);
     if (!req.body.password) {
-        return next({ statusCode: 404, error: true, errormessage: "Password field missing" });
+        return next({statusCode: 404, error: true, errormessage: "Password field missing"});
     }
     u.setPassword(req.body.password);
-    u.save().then((data) => {
-        return res.status(200).json({ error: false, errormessage: "", id: data._id });
+
+    u.save().then((data: any) => {
+        return res.status(200).json({error: false, errormessage: "", id: data._id});
     }).catch((reason) => {
         if (reason.code === 11000)
-            return next({ statusCode: 404, error: true, errormessage: "User already exists" });
-        return next({ statusCode: 404, error: true, errormessage: "DB error: " + reason.errmsg });
-    });
+            return next({statusCode: 404, error: true, errormessage: "User already exists"});
+        return next({statusCode: 404, error: true, errormessage: "DB error: " + reason.errmsg});
+    })
 });
-app.get('/login', (req, res, next) => {
+
+app.get('/login', (req, res, next)=>{
     let username = req.body.username;
     let password = req.body.password;
-    console.log("New login attempt from ".green + username);
-    user.getModel().findOne({ mail: username }, (err, user) => {
+    console.log("New login attempt from ".green + username );
+    user.getModel().findOne( {mail: username} , (err, user)=> {
         if (err) {
-            return next({ statusCode: 500, error: true, errormessage: err });
+            return next({statusCode: 500, error: true, errormessage: err});
         }
         if (!user) {
-            return next({ statusCode: 500, error: true, errormessage: "Invalid user" });
+            return next({statusCode: 500, error: true, errormessage: "Invalid user"});
         }
         if (user.validatePassword(password)) {
             let tokendata = {
-            // TODO define token
+                // TODO define token
             };
+
             console.log("Login granted. Generating token");
-            let token_signed = jsonwebtoken.sign(tokendata, process.env.JWT_SECRET, { expiresIn: '1h' });
+            let token_signed = jsonwebtoken.sign(
+                tokendata,
+                process.env.JWT_SECRET as jsonwebtoken.Secret,
+                { expiresIn: '1h'}
+            );
+
             // https://jwt.io
             return res.status(200).json({
                 error: false,
@@ -92,9 +100,51 @@ app.get('/login', (req, res, next) => {
                 token: token_signed
             });
         }
-        return next({ statusCode: 500, error: true, errormessage: "Invalid password" });
+        return next({statusCode: 500, error: true, errormessage: "Invalid password"});
     });
 });
+
+ */
+// the ENV var DBHOST is set only if the server is running inside a container
+const dbHost = process.env.DBHOST || '127.0.0.1';
+mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
+    let server = http.createServer(app);
+    app.use("/users", user_routes_1.userRouter);
+    ;
+    server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
+}).then(() => {
+    let s = 'Connected to mongoDB, dbHost: ' + dbHost;
+    console.log(s.bgGreen);
+}).catch(err => console.log(err));
+/*
+ var u = newUser({
+        username: 'BassHound',
+        email: 'bass@hound.it',
+        role: 'Admin'
+    });
+    u.setPassword("1234");
+    u.save();
+ */
+/*
+import * as dotenv from "dotenv";
+import cors from "cors";
+import express from "express";
+import {expressjwt as jwt} from "express-jwt";
+import bodyParser from "body-parser";
+import * as mongoose from "mongoose";
+import * as http from "http";
+import {userRouter} from "./Routes/user.routes";
+import colors = require('colors');
+
+// Load environment variables from the .env file, where the ATLAS_URI is configured
+dotenv.config();
+
+const app = express();
+
+app.use("/users", userRouter);
+app.use(cors());
+app.use(bodyParser.json());
+
 // the ENV var DBHOST is set only if the server is running inside a container
 const dbHost = process.env.DBHOST || '127.0.0.1';
 mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
@@ -103,21 +153,7 @@ mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
 }).then(() => {
     let s = 'Connected to mongoDB, dbHost: ' + dbHost;
     console.log(s.bgGreen);
-    return user.getModel().findOne({ email: "bass@hound.it" });
-}).then((admin) => {
-    if (admin) {
-        console.log('The admin user already exists');
-        return;
-    }
-    console.log('Creating a new admin user...');
-    // newUser returns a user mongoose model in wich we can call the method save
-    var u = (0, User_1.newUser)({
-        username: 'BassHound',
-        email: 'bass@hound.it'
-    });
-    u.setAdmin();
-    u.setModerator();
-    u.setPassword("1234");
-    u.save();
-    console.log('User admin created');
 }).catch(err => console.log(err));
+
+
+ */
