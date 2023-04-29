@@ -1,10 +1,11 @@
 import mongoose = require('mongoose');
 import crypto = require('crypto');
+
 export interface User extends mongoose.Document {
     readonly _id: mongoose.Schema.Types.ObjectId,
     username: string,
     email: string,
-    roles: string[],
+    role:  "Admin" | "Moderator" | "User";
     salt: string,    // salt is a random string that will be mixed with the actual password before hashing
     digest: string,  // this is the hashed password (digest of the password)
     setPassword: (pwd:string)=>void,
@@ -25,8 +26,8 @@ var userSchema = new mongoose.Schema<User>( {
         required: true,
         unique: true
     },
-    roles:  {
-        type: [mongoose.SchemaTypes.String],
+    role:  {
+        type: mongoose.SchemaTypes.String,
         required: true 
     },
     salt:  {
@@ -71,30 +72,27 @@ userSchema.methods.validatePassword = function( pwd:string ):boolean {
     return (this.digest === digest);
 }
 
-userSchema.methods.hasAdminRole = function(): boolean {
-    for( var roleidx in this.roles ) {
-        if( this.roles[roleidx] === 'ADMIN' )
-            return true;
-    }
-    return false;
+userSchema.methods.isAdmin = function(): boolean {
+    return !!(this.role = "Admin");
 }
 
 userSchema.methods.setAdmin = function() {
     if( !this.hasAdminRole() )
-        this.roles.push( "ADMIN" );
+        this.role = "Admin";
 }
 
-userSchema.methods.hasModeratorRole = function(): boolean {
-    for( var roleidx in this.roles ) {
-        if( this.roles[roleidx] === 'MODERATOR' )
-            return true;
-    }
-    return false;
+
+
+userSchema.methods.isModerator = function(): boolean {
+
+    return !!(this.role = "Moderator");
+
+
 }
 
 userSchema.methods.setModerator = function() {
     if( !this.hasModeratorRole() )
-        this.roles.push( "MODERATOR" );
+            this.role = "Moderator";
 }
 
 
@@ -117,7 +115,5 @@ export function getModel() : mongoose.Model< User >  { // Return Model as single
 
 export function newUser( data: any ): User {
     var _usermodel = getModel();
-    var user = new _usermodel( data );
-
-    return user;
+    return new _usermodel(data);
 }

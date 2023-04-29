@@ -1,3 +1,5 @@
+/*
+
 import {newUser} from "./Models/User";
 
 const dotenv = require('dotenv').config();
@@ -107,4 +109,37 @@ mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
     u.setPassword("1234");
     u.save();
     console.log('User admin created');
+}).catch(err => console.log(err));
+
+
+ */
+
+
+import * as dotenv from "dotenv";
+import cors from "cors";
+import express from "express";
+import {expressjwt as jwt} from "express-jwt";
+import bodyParser from "body-parser";
+import * as mongoose from "mongoose";
+import * as http from "http";
+import {userRouter} from "./Routes/user.routes";
+import colors = require('colors');
+
+// Load environment variables from the .env file, where the ATLAS_URI is configured
+dotenv.config();
+
+const app = express();
+
+app.use("/users", userRouter);
+app.use(cors());
+app.use(bodyParser.json());
+
+// the ENV var DBHOST is set only if the server is running inside a container
+const dbHost = process.env.DBHOST || '127.0.0.1';
+mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
+    let server = http.createServer(app);
+    server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
+}).then(() => {
+    let s = 'Connected to mongoDB, dbHost: ' + dbHost;
+    console.log(s.bgGreen);
 }).catch(err => console.log(err));
