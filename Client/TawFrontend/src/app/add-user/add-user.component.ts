@@ -21,6 +21,7 @@ export class AddUserComponent {
       .subscribe({
         next: () => {
           this.router.navigate(['/users']);
+          alert("User successfully created");
         },
         error: (error) => {
           alert("Failed to create user");

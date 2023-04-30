@@ -8,13 +8,13 @@ import { User } from '../User/user';
   template: `
     <form class="user-form" autocomplete="off" [formGroup]="userForm" (ngSubmit)="submitForm()">
       <div class="form-floating mb-3">
-        <input class="form-control" type="text" id="name" formControlName="name" placeholder="Name" required>
-        <label for="name">Name</label>
+        <input class="form-control" type="text" id="username" formControlName="username" placeholder="username" required>
+        <label for="username">Username</label>
       </div>
 
-      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
-        <div *ngIf="name.errors?.['required']">
-          Name is required.
+      <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+        <div *ngIf="username.errors?.['required']">
+          Username is required.
         </div>
       </div>
 
@@ -33,11 +33,11 @@ import { User } from '../User/user';
       <div class="mb-3">
         <div class="form-check">
           <input class="form-check-input" type="radio" formControlName="role" name="role" id="role-admin"
-                 value="admin" required>
+                 value="Admin" required>
           <label class="form-check-label" for="role-admin">Admin</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" formControlName="role" name="role" id="role-moderator" value="moderator">
+          <input class="form-check-input" type="radio" formControlName="role" name="role" id="role-moderator" value="Moderator">
           <label class="form-check-label" for="role-moderator">Moderator</label>
         </div>
       </div>
@@ -67,14 +67,14 @@ export class UserFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder) { }
 
-  get name() { return this.userForm.get('name')!; }
+  get username() { return this.userForm.get('username')!; }
   get email() { return this.userForm.get('email')!; }
   get role() { return this.userForm.get('role')!; }
 
   ngOnInit() {
     this.initialState.subscribe(user => {
       this.userForm = this.fb.group({
-        name: [ user.username, [Validators.required] ],
+        username: [ user.username, [Validators.required] ],
         email: [ user.email, [Validators.required] ],
         role: [ user.role, [Validators.required] ]
       });

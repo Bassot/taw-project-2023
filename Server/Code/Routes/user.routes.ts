@@ -1,5 +1,4 @@
 import * as express from "express";
-import * as mongodb from "mongodb";
 import * as user from "../Models/User";
 
 export const userRouter = express.Router();
@@ -16,8 +15,7 @@ userRouter.get("/", async (_req, res) => {
 });
 
 userRouter.post("/", async (req, res) => {
-    const newuser = req.body;
-    let u = user.newUser(newuser);
+    let u = user.newUser(req.body);
     u.setPassword("1234");
     u.save().then((data: any) => {
         return res.status(200).json({error: false, errormessage: "", id: data._id});
@@ -26,4 +24,7 @@ userRouter.post("/", async (req, res) => {
             return res.status(404).json({error: true, errormessage: "User already exists"});
         return res.status(404).json({error: true, errormessage: "DB error: " + reason.errmsg});
     })
+    console.log(req.body);
+
 });
+

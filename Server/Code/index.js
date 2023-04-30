@@ -110,7 +110,6 @@ const dbHost = process.env.DBHOST || '127.0.0.1';
 mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {
     let server = http.createServer(app);
     app.use("/users", user_routes_1.userRouter);
-    ;
     server.listen(8080, () => console.log("HTTP Server started on port 8080".green));
 }).then(() => {
     let s = 'Connected to mongoDB, dbHost: ' + dbHost;
