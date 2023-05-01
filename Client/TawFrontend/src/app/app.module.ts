@@ -8,20 +8,36 @@ import { UsersListComponent } from './users-list/users-list.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddUserComponent } from './add-user/add-user.component';
+import { JwtModule } from "@auth0/angular-jwt";
+import { UserLoginComponent } from './user-login/user-login.component';
+import { LoginFormComponent } from './login-form/login-form.component';
 
+export function tokenGetter() {
+  return localStorage.getItem("auth_jwt");
+}
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersListComponent,
     UserFormComponent,
-    AddUserComponent
+    AddUserComponent,
+    UserLoginComponent,
+    LoginFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        authScheme: "Basic",
+        allowedDomains: ["http://localhost:8080"],
+        disallowedRoutes: ["http://localhost:8080/login","http://localhost:8080/register"],
+      },
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]

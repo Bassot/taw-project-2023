@@ -59,14 +59,13 @@ app.post('/users', (req, res, next) => {
     })
 });
 
-app.get('/login', (req, res, next)=>{
+*/
+app.post('/login', (req, res, next)=>{
     let username = req.body.username;
     let password = req.body.password;
     console.log("New login attempt from ".green + username );
-    user.getModel().findOne( {mail: username} , (err, user)=> {
-        if (err) {
-            return next({statusCode: 500, error: true, errormessage: err});
-        }
+
+    user.getModel().findOne( {username: username}).then((user)=> {
         if (!user) {
             return next({statusCode: 500, error: true, errormessage: "Invalid user"});
         }
@@ -94,7 +93,7 @@ app.get('/login', (req, res, next)=>{
     });
 });
 
- */
+
 
 // the ENV var DBHOST is set only if the server is running inside a container
 const dbHost = process.env.DBHOST || '127.0.0.1';

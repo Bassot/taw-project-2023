@@ -40,6 +40,8 @@ const http = __importStar(require("http"));
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { expressjwt: jwt } = require('express-jwt');
+const jsonwebtoken = require("jsonwebtoken"); // JWT generation
+const user = __importStar(require("./Models/User"));
 const user_routes_1 = require("./Routes/user.routes");
 const app = express();
 let auth = jwt({
@@ -69,29 +71,21 @@ app.post('/users', (req, res, next) => {
     })
 });
 
-app.get('/login', (req, res, next)=>{
+*/
+app.post('/login', (req, res, next) => {
     let username = req.body.username;
     let password = req.body.password;
-    console.log("New login attempt from ".green + username );
-    user.getModel().findOne( {mail: username} , (err, user)=> {
-        if (err) {
-            return next({statusCode: 500, error: true, errormessage: err});
-        }
+    console.log("New login attempt from ".green + username);
+    user.getModel().findOne({ username: username }).then((user) => {
         if (!user) {
-            return next({statusCode: 500, error: true, errormessage: "Invalid user"});
+            return next({ statusCode: 500, error: true, errormessage: "Invalid user" });
         }
         if (user.validatePassword(password)) {
             let tokendata = {
-                // TODO define token
+            // TODO define token
             };
-
             console.log("Login granted. Generating token");
-            let token_signed = jsonwebtoken.sign(
-                tokendata,
-                process.env.JWT_SECRET as jsonwebtoken.Secret,
-                { expiresIn: '1h'}
-            );
-
+            let token_signed = jsonwebtoken.sign(tokendata, process.env.JWT_SECRET, { expiresIn: '1h' });
             // https://jwt.io
             return res.status(200).json({
                 error: false,
@@ -100,11 +94,9 @@ app.get('/login', (req, res, next)=>{
                 token: token_signed
             });
         }
-        return next({statusCode: 500, error: true, errormessage: "Invalid password"});
+        return next({ statusCode: 500, error: true, errormessage: "Invalid password" });
     });
 });
-
- */
 // the ENV var DBHOST is set only if the server is running inside a container
 const dbHost = process.env.DBHOST || '127.0.0.1';
 mongoose.connect('mongodb://' + dbHost + ':27017/taw-app2023').then(() => {

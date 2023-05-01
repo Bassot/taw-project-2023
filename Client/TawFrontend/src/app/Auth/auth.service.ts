@@ -8,6 +8,7 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
+import {Auth} from "./auth";
 @Injectable({
   providedIn: 'root',
 })
@@ -16,31 +17,29 @@ export class AuthService {
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   currentUser = {};
   constructor(private http: HttpClient, public router: Router) {}
-  // Sign-up
-  signUp(user: User): Observable<any> {
-    let api = `${this.url}/register`;
-    return this.http.post(api, user).pipe(catchError(this.handleError));
-  }
+
   // Sign-in
-  signIn(user: User) {
+
+  signIn(auth: Auth) {
     return this.http
-      .post<any>(`${this.url}/signin`, user)
+      .post(`${this.url}/login`, auth)
       .subscribe((res: any) => {
-        localStorage.setItem('access_token', res.token);
-        this.router.navigate(['/']);
+        localStorage.setItem('auth_jwt', res.token);
+        this.router.navigate(['/users']);
+        alert(res.token);
       });
   }
   getToken() {
-    return localStorage.getItem('access_token');
+    return localStorage.getItem('auth_jwt');
   }
   get isLoggedIn(): boolean {
-    let authToken = localStorage.getItem('access_token');
+    let authToken = localStorage.getItem('auth_jwt');
     return authToken !== null ? true : false;
   }
   doLogout() {
-    let removeToken = localStorage.removeItem('access_token');
+    let removeToken = localStorage.removeItem('auth_jwt');
     if (removeToken == null) {
-      this.router.navigate(['log-in']);
+      this.router.navigate(['login']);
     }
   }
   // Error
