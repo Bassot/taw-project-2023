@@ -11,6 +11,7 @@ import { AddUserComponent } from './add-user/add-user.component';
 import { JwtModule } from "@auth0/angular-jwt";
 import { UserLoginComponent } from './user-login/user-login.component';
 import { LoginFormComponent } from './login-form/login-form.component';
+import { DeleteUserComponent } from './delete-user/delete-user.component';
 
 export function tokenGetter() {
   return localStorage.getItem("auth_jwt");
@@ -23,7 +24,8 @@ export function tokenGetter() {
     UserFormComponent,
     AddUserComponent,
     UserLoginComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    DeleteUserComponent
   ],
   imports: [
     BrowserModule,

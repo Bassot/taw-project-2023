@@ -4,11 +4,34 @@ import * as user from "../Models/User";
 export const userRouter = express.Router();
 userRouter.use(express.json());
 
-userRouter.get("/", async (_req, res) => {
+userRouter.get("/", async (req, res) => {
     try {
         let users = await user.getModel().find({});
         res.status(200).send(JSON.stringify(users));
         }
+    catch (error :any) {
+        res.status(500).send(error.message);
+    }
+});
+
+userRouter.put("/:id", async (req, res) => {
+    const id = req?.params?.id;
+    const updateduser = req.body;
+    try {
+        let users = await user.getModel().findOneAndUpdate({username: id}, {$set: updateduser});
+        res.status(200).send(JSON.stringify(users));
+    }
+    catch (error :any) {
+        res.status(500).send(error.message);
+    }
+});
+
+userRouter.delete("/:id", async (req, res) => {
+    const id = req?.params?.id;
+    try {
+        let users = await user.getModel().deleteOne({username: id});
+        res.status(200).send(JSON.stringify(users));
+    }
     catch (error :any) {
         res.status(500).send(error.message);
     }
