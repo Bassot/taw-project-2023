@@ -14,11 +14,27 @@ userRouter.get("/", async (req, res) => {
     }
 });
 
-userRouter.put("/:id", async (req, res) => {
-    const id = req?.params?.id;
+userRouter.get("/:id", async (req, res) => {
+    try {
+        const username = req?.params?.id;
+        let usertoupdate = await user.getModel().findOne({username: username});
+
+        if (usertoupdate) {
+            res.status(200).send(usertoupdate);
+        } else {
+            res.status(404).send(`Failed to find the user: ${username}`);
+        }
+
+    } catch (error) {
+        res.status(404).send(`Failed to find the user: ${req?.params?.id}`);
+    }
+});
+
+userRouter.put("/:username", async (req, res) => {
+    const username = req?.params?.username;
     const updateduser = req.body;
     try {
-        let users = await user.getModel().findOneAndUpdate({username: id}, {$set: updateduser});
+        let users = await user.getModel().findOneAndUpdate({username: username}, {$set: updateduser});
         res.status(200).send(JSON.stringify(users));
     }
     catch (error :any) {
@@ -26,10 +42,10 @@ userRouter.put("/:id", async (req, res) => {
     }
 });
 
-userRouter.delete("/:id", async (req, res) => {
-    const id = req?.params?.id;
+userRouter.delete("/:username", async (req, res) => {
+    const username = req?.params?.username;
     try {
-        let users = await user.getModel().deleteOne({username: id});
+        let users = await user.getModel().deleteOne({username: username});
         res.status(200).send(JSON.stringify(users));
     }
     catch (error :any) {
