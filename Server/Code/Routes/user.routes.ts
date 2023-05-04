@@ -1,8 +1,27 @@
 import * as express from "express";
 import * as user from "../Models/User";
+import {expressjwt as jwt} from "express-jwt";
+const dotenv = require('dotenv').config();
 
+if (dotenv.error) {
+    console.log("Unable to load \".env\" file. Please provide one to store the JWT secret key".red);
+    process.exit(-1);
+} else if (!process.env.JWT_SECRET) {
+    console.log("\".env\" file loaded but JWT_SECRET=<secret> key-value pair was not found".red);
+    process.exit(-1);
+}
 export const userRouter = express.Router();
+let auth = jwt( {
+    secret: process.env.JWT_SECRET,
+    algorithms: ["HS256"]
+} );
 userRouter.use(express.json());
+userRouter.use(auth);
+userRouter.use(function (req: any, res) {
+    if (!req.auth.isadmin) return res.sendStatus(401);
+    res.sendStatus(200);
+});
+
 
 userRouter.get("/", async (req, res) => {
     try {

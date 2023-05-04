@@ -5,14 +5,13 @@ export interface User extends mongoose.Document {
     readonly _id: mongoose.Schema.Types.ObjectId,
     username: string,
     email: string,
-    role:  "Admin" | "Moderator" | "User";
+    role:  "Waiter" | "Cook" | "Bartender" | "Cashier";
+    admin: boolean;
     salt: string,    // salt is a random string that will be mixed with the actual password before hashing
     digest: string,  // this is the hashed password (digest of the password)
     setPassword: (pwd:string)=>void,
+    isAdmin: ()=>boolean;
     validatePassword: (pwd:string)=>boolean,
-    hasAdminRole: ()=>boolean,
-    setAdmin: ()=>void,
-    hasModeratorRole: ()=>boolean,
     setModerator: ()=>void,
 }
 
@@ -73,26 +72,7 @@ userSchema.methods.validatePassword = function( pwd:string ):boolean {
 }
 
 userSchema.methods.isAdmin = function(): boolean {
-    return !!(this.role = "Admin");
-}
-
-userSchema.methods.setAdmin = function() {
-    if( !this.hasAdminRole() )
-        this.role = "Admin";
-}
-
-
-
-userSchema.methods.isModerator = function(): boolean {
-
-    return !!(this.role = "Moderator");
-
-
-}
-
-userSchema.methods.setModerator = function() {
-    if( !this.hasModeratorRole() )
-            this.role = "Moderator";
+    return this.admin;
 }
 
 
