@@ -29,6 +29,10 @@ var userSchema = new mongoose.Schema<User>( {
         type: mongoose.SchemaTypes.String,
         required: true 
     },
+    admin:  {
+        type: mongoose.SchemaTypes.Boolean,
+        required: true
+    },
     salt:  {
         type: mongoose.SchemaTypes.String,
         required: false 
