@@ -70,9 +70,8 @@ app.post('/login', (req, res, next)=>{
             return next({statusCode: 500, error: true, errormessage: "Invalid user"});
         }
         if (user.validatePassword(password)) {
-            let tokendata = {
-                // TODO define token
-            };
+
+            let tokendata = { isadmin: user.isAdmin() };
 
             console.log("Login granted. Generating token");
             let token_signed = jsonwebtoken.sign(

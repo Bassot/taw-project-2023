@@ -23,6 +23,7 @@ import { UserService } from '../User/user.service';
         <td>{{user.email}}</td>
         <td>{{user.role}}</td>
         <td>
+          <button class="btn btn-info" [routerLink]="['edit/', user.username]">Edit</button>
           <button class="btn btn-danger" (click)="deleteUser(user.username || '')">Delete</button>
         </td>
       </tr>
@@ -41,8 +42,8 @@ export class UsersListComponent implements OnInit {
     this.fetchUsers();
   }
 
-  deleteUser(id: string): void {
-    this.usersService.deleteUser(id).subscribe({
+  deleteUser(username: string): void {
+    this.usersService.deleteUser(username).subscribe({
       next: () => this.fetchUsers()
     });
   }

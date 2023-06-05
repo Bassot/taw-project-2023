@@ -24,16 +24,20 @@ export class UserService {
     return this.users$;
   }
 
-  getUser(id: string): Observable<User> {
-    return this.httpClient.get<User>(`${this.url}/users/${id}`);
-  }
-
   createUser(user: User): Observable<string> {
     return this.httpClient.post(`${this.url}/users`, user, { responseType: 'text' });
   }
 
 
-  deleteUser(id: string): Observable<string> {
-    return this.httpClient.delete(`${this.url}/users/${id}`, { responseType: 'text' });
+  deleteUser(username: string): Observable<string> {
+    return this.httpClient.delete(`${this.url}/users/${username}`, { responseType: 'text' });
+  }
+
+  getUser(username: string): Observable<User> {
+    return this.httpClient.get<User>(`${this.url}/users/${username}`);
+  }
+
+  updateUser(username: string, user: User): Observable<string> {
+    return this.httpClient.put(`${this.url}/users/${username}`, user, { responseType: 'text' });
   }
 }

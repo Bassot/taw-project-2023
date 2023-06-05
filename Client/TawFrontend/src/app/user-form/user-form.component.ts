@@ -29,16 +29,23 @@ import { User } from '../User/user';
           Email address is required.
         </div>
       </div>
-
       <div class="mb-3">
         <div class="form-check">
-          <input class="form-check-input" type="radio" formControlName="role" name="role" id="role-admin"
-                 value="Admin" required>
-          <label class="form-check-label" for="role-admin">Admin</label>
+          <input class="form-check-input" type="radio" formControlName="role" name="role" id="role-waiter"
+                 value="Waiter" required>
+          <label class="form-check-label" for="role-waiter">Admin</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" formControlName="role" name="role" id="role-moderator" value="Moderator">
-          <label class="form-check-label" for="role-moderator">Moderator</label>
+          <input class="form-check-input" type="radio" formControlName="role" name="role" id="role-cook" value="Cook">
+          <label class="form-check-label" for="role-cook">Cook</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" formControlName="role" name="role" id="role-bartender" value="Bartender">
+          <label class="form-check-label" for="role-cook">Bartender</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" formControlName="role" name="role" id="role-cashier" value="Cashier">
+          <label class="form-check-label" for="role-cashier">Cashier</label>
         </div>
       </div>
 
@@ -87,3 +94,5 @@ export class UserFormComponent implements OnInit {
     this.formSubmitted.emit(this.userForm.value);
   }
 }
+
+
