@@ -16,6 +16,7 @@ export class AuthService {
   private url = 'http://localhost:8080';
   headers = new HttpHeaders().set('Content-Type', 'application/json');
   currentUser = {};
+  private token: string = '';
   constructor(private http: HttpClient, public router: Router) {}
 
   // Sign-in
