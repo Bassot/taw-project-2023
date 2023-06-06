@@ -1,17 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { UsersListComponent } from './users-list/users-list.component';
-import {AddUserComponent} from "./add-user/add-user.component";
 import { UserLoginComponent } from './user-login/user-login.component';
-import { EditUserComponent } from './edit-user/edit-user.component';
+import { UserSignupComponent } from "./user-signup/user-signup.component";
+import { WaiterComponent } from "./waiter/waiter.component";
+import {CookComponent} from "./cook/cook.component";
+import {BartenderComponent} from "./bartender/bartender.component";
+import {CashierComponent} from "./cashier/cashier.component";
+
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'users', pathMatch: 'full' },
-  { path: 'users', component: UsersListComponent },
-  { path: 'users/new', component: AddUserComponent },
-  { path: 'users/edit/:id', component: EditUserComponent },
-  { path: 'login', component: UserLoginComponent }
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: UserLoginComponent },
+  { path: 'signup', component: UserSignupComponent },
+  { path: 'waiters', component: WaiterComponent },
+  { path: 'cooks', component: CookComponent },
+  { path: 'bartenders', component: BartenderComponent },
+  { path: 'cashiers', component: CashierComponent }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

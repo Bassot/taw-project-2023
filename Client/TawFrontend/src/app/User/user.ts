@@ -1,5 +1,7 @@
 export interface User {
-  username?: string;
-  email?: string;
-  role?: "Waiter" | "Cook" | "Bartender" | "Cashier";
+  email: string,
+  password: string,
+  username: string,
+  //role: "Waiter" | "Cook" | "Bartender" | "Cashier"
+  role: string
 }

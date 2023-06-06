@@ -11,8 +11,9 @@ export interface User extends mongoose.Document {
     digest: string,  // this is the hashed password (digest of the password)
     setPassword: (pwd:string)=>void,
     isAdmin: ()=>boolean;
+    setAdmin: (isAdmin: boolean)=>void,
+
     validatePassword: (pwd:string)=>boolean,
-    setModerator: ()=>void,
 }
 
 var userSchema = new mongoose.Schema<User>( {
@@ -79,7 +80,9 @@ userSchema.methods.isAdmin = function(): boolean {
     return this.admin;
 }
 
-
+userSchema.methods.setAdmin = function(isAdmin: boolean) {
+    this.admin = isAdmin;
+}
 
 export function getSchema() { return userSchema; }
 
@@ -97,7 +100,7 @@ export function getModel() : mongoose.Model< User >  { // Return Model as single
     return userModel;
 }
 
-export function newUser( data: any ): User {
+export function newUser( data ): User {
     var _usermodel = getModel();
     return new _usermodel(data);
 }

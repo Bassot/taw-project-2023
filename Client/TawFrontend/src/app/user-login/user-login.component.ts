@@ -1,23 +1,45 @@
 import {Component} from "@angular/core";
 import {Router} from "@angular/router";
-import {AuthService} from "../Auth/auth.service";
-import {User} from "../User/user";
+import {UserService} from "../User/user.service";
 import {Auth} from "../Auth/auth";
-
 @Component({
   selector: 'app-login-user',
-  template: `
-   <h2 class="text-center m-5">Login</h2>
-   <app-login-form (formSubmitted)="login($event)"></app-login-form>
- `
+  templateUrl: 'user-login.component.html',
+  styleUrls: ['user-login.component.css']
 })
 export class UserLoginComponent {
-  constructor(
-    private router: Router,
-    private authService: AuthService
-  ) { }
+  constructor( private router: Router, private userService: UserService) {}
 
-  login(auth: Auth) {
-    this.authService.signIn(auth)
+  login(email: string, password: string, remember: boolean) {
+    let curUser: Auth = {
+      email: email,
+      password: password
+    }
+    this.userService.signIn(curUser, remember).subscribe({
+      next: (res) => {
+        console.log('You are logged in, response: ' + JSON.stringify(res));
+        console.log('Role: ' + this.userService.getRole());
+        switch (this.userService.getRole()) {
+          case 'Waiter':
+            this.router.navigate(['/waiters']);
+            break;
+          case 'Cook':
+            this.router.navigate(['/cooks']);
+            break;
+          case 'Bartender':
+            this.router.navigate(['/bartender']);
+            break;
+          case 'Cashier':
+            this.router.navigate(['/cashier']);
+            break;
+        }
+      },
+      error: (err) => {
+        console.log(('Login error: ' + JSON.stringify(err)));
+      }
+    });
+  }
+  navToSignUp(){
+    this.router.navigate(['/signup']);
   }
 }

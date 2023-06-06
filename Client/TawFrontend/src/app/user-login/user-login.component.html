@@ -1,1 +1,18 @@
-<p>user-login works!</p>
+<div class="container">
+  <label><b>Email</b></label>
+  <input type="text" #email name="email" placeholder="Enter Email" required autofocus>
+
+  <label><b>Password</b></label>
+  <input type="password" #password name="password" placeholder="Enter Password"  required>
+
+  <label>
+    <input type="checkbox" #remember checked="checked" name="remember"> Remember me
+  </label>
+  <button type="submit" (click)="login(email.value, password.value, remember.checked)">Login</button>
+  <button type="submit" (click)="navToSignUp()">Sign Up</button>
+</div>
+
+<div class="container" style="background-color:#f1f1f1">
+  <button type="button" class="cancelbtn">Cancel</button>
+  <span class="psw">Forgot <a href="#">password?</a></span>
+</div>

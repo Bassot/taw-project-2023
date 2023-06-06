@@ -1,31 +1,31 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { UsersListComponent } from './users-list/users-list.component';
-import { UserFormComponent } from './user-form/user-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AddUserComponent } from './add-user/add-user.component';
 import { JwtModule } from "@auth0/angular-jwt";
 import { UserLoginComponent } from './user-login/user-login.component';
-import { LoginFormComponent } from './login-form/login-form.component';
-import { EditUserComponent } from './edit-user/edit-user.component';
+import { UserSignupComponent } from './user-signup/user-signup.component';
+import {getToken} from "./User/user.service";
+import { WaiterComponent } from './waiter/waiter.component';
+import { CookComponent } from './cook/cook.component';
+import { BartenderComponent } from './bartender/bartender.component';
+import { CashierComponent } from './cashier/cashier.component';
 
 export function tokenGetter() {
-  return localStorage.getItem("auth_jwt");
+  return getToken();
 }
 
 @NgModule({
   declarations: [
     AppComponent,
-    UsersListComponent,
-    UserFormComponent,
-    AddUserComponent,
     UserLoginComponent,
-    LoginFormComponent,
-    EditUserComponent
+    UserSignupComponent,
+    WaiterComponent,
+    CookComponent,
+    BartenderComponent,
+    CashierComponent,
   ],
   imports: [
     BrowserModule,

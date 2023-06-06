@@ -1,0 +1,24 @@
+<div class="container">
+  <label><b>Email</b></label>
+  <input type="text" #email name="email" placeholder="Enter Email" required autofocus>
+
+  <label><b>Password</b></label>
+  <input type="password" #password name="password" placeholder="Enter Password" required>
+
+  <label><b>Username</b></label>
+  <input type="text" #username name="username" placeholder="Enter Username" required>
+
+  <label for="role"><b>Role </b></label>
+  <select name="roles" id="role" #role>
+    <option value="Waiter">Waiter</option>
+    <option value="Cook">Cook</option>
+    <option value="Bartender">Bartender</option>
+    <option value="Cashier">Cashie</option>
+  </select>
+  <button type="submit" (click)="signUp(email.value, password.value, username.value, role.value)">Register!</button>
+</div>
+
+<div class="container" style="background-color:#f1f1f1">
+  <button type="button" class="cancelbtn">Cancel</button>
+  <span class="psw">Forgot <a href="#">password?</a></span>
+</div>
